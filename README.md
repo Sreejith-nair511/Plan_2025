@@ -28,9 +28,7 @@ A comprehensive AI-powered platform for campus placement preparation built with 
 
 - Node.js 18+ 
 - PostgreSQL database
-- Google Gemini API key
-- Clerk account
-- Razorpay account (for payments)
+- Git
 
 ### Installation
 
@@ -50,16 +48,14 @@ A comprehensive AI-powered platform for campus placement preparation built with 
    cp .env.example .env.local
    ```
    
-   Fill in your environment variables:
+   Edit `.env.local` with your configuration:
    ```env
    # Database
    DATABASE_URL="postgresql://username:password@localhost:5432/placement_prep_buddy"
 
    # Clerk Authentication
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_key_here
-   CLERK_SECRET_KEY=sk_test_your_key_here
-   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+   CLERK_SECRET_KEY=your_clerk_secret_key
    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 
