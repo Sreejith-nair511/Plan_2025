@@ -6,6 +6,7 @@ async function main() {
   console.log('🌱 Starting database seed...')
 
   // Create sample users
+  //make sure we seed it with all the actual login data 
   const users = await Promise.all([
     prisma.user.upsert({
       where: { email: 'arjun@example.com' },
