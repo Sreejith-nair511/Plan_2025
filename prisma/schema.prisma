@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  clerkId           String   @unique
+  email             String   @unique
+  name              String
+  branch            String?
+  year              Int?
+  subscriptionStatus String  @default("free") // free, premium
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  quizAttempts      QuizAttempt[]
+  leaderboard       Leaderboard?
+  interviewExperiences InterviewExperience[]
+  
+  @@map("users")
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  text        String
+  options     Json     // Array of strings
+  answer      Int      // Index of correct answer
+  explanation String?
+  tags        String[] // Topics like "DSA", "OS", "DBMS"
+  difficulty  String   @default("medium") // easy, medium, hard
+  company     String?  // Company specific questions
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  quizAttempts QuizAttempt[]
+  
+  @@map("questions")
+}
+
+model QuizAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  questionId  String
+  userAnswer  Int
+  isCorrect   Boolean
+  score       Int
+  timeSpent   Int      // in seconds
+  timestamp   DateTime @default(now())
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  @@map("quiz_attempts")
+}
+
+model Leaderboard {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  points    Int      @default(0)
+  streak    Int      @default(0)
+  badges    String[] // Array of badge names
+  rank      Int?
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("leaderboard")
+}
+
+model InterviewExperience {
+  id           String   @id @default(cuid())
+  userId       String
+  company      String
+  role         String
+  experienceText String
+  difficulty   String   @default("medium") // easy, medium, hard
+  outcome      String?  // selected, rejected, pending
+  tips         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("interview_experiences")
+}
